@@ -1,0 +1,435 @@
+\documentclass{beamer}
+
+\usetheme{HSE}
+\setbeamertemplate{footline}[page number]
+
+\usepackage{cmap}					
+\usepackage{mathtext} 				
+\usepackage[T2A]{fontenc}			
+\usepackage[utf8]{inputenc}			
+\usepackage[english,russian]{babel}
+
+\title{Квадратичная оптимизация в задаче прогнозирования SUT таблиц}
+\author{Поздняков Виталий,  Рог Алексей}
+\institute{Высшая школа экономики}
+\date{Декабрь 2019}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\section{Что такое SUT таблицы}
+
+\begin{frame}
+	\frametitle{\insertsection}
+	
+	\includegraphics[width=\textwidth]{2019-12-07_12-18-36.png}
+	
+	\begin{itemize}
+    \item SUT (Supply and Use tables) — таблицы "затраты-выпуск"
+    \item Supply Table — таблица \textbf{ресурсов} показывает сколько продукции было \textbf{реализовано} каждой отраслью в стране за год
+    \item Use table — таблица \textbf{использования} показывает сколько продукции было \textbf{потреблено} каждой отраслью в стране за год
+    \end{itemize}
+    
+\end{frame}
+
+\section{Пример SUT таблиц}
+\begin{frame}
+	\frametitle{\insertsection}
+	
+     \includegraphics[width=\textwidth]{2019-12-04_20-57-19.png}
+     Нидерланды, 2010 год, фрагмент
+
+\end{frame}
+
+\section{Задача прогнозирования SUT таблиц}
+\begin{frame}
+	\frametitle{\insertsection}
+	
+	\begin{itemize}
+	\item Полное исследование требует финансовых и временных затрат, поэтому обычно проводится раз в 5 лет
+	\item Требуется спрогнозировать SUT по историческим и сводным данным
+	\item Исторические данные — это SUT прошлых лет
+	\item Сводные данные: 
+	\begin{itemize}
+	    \item Итоговой объем продукции для каждой отрасли
+	    \item Итоговой объем продукции для каждого вида продукции
+	\end{itemize}
+	\end{itemize}
+
+\end{frame}
+
+\section{Модель}
+\begin{frame}
+	\frametitle{\insertsection}
+	
+	\begin{itemize}
+	\item $A_{m\times n}$ — матрица за прошлый год
+	\item $X^{true}_{m\times n}$ — искомая поставок за текущий год
+	\item Сводные данные за текущий год:
+	\begin{itemize}
+	\item Вектор $u = X^{true} \mathbf 1$ содержит сумму для $1, 2, \dots, m$ строки, \\ где $\mathbf 1$ — вектор единиц
+	\item Вектор $v = (X^{true})^T \mathbf 1$ содержит сумму для $1, 2, \dots, m$ колонки
+	\end{itemize}
+	\item Требуется построить такую матрицу $X$, чтобы расстояние $f(X)$ до матрицы $A$ было минимальным при ограничениях: 	$$\begin{cases}
+	X\mathbf 1 = u \\
+	X^T\mathbf 1 = v \\
+	x_{ij} \geq 0 \\
+	x_{ij} = 0 \forall i,j:a_{ij} = 0
+	\end{cases}$$
+	\end{itemize}
+
+\end{frame}
+
+\section{Пример}
+\begin{frame}
+	\frametitle{\insertsection}
+	
+	Пусть матрица $A$ имеет вид:
+	
+	\includegraphics[width=9cm]{2019-12-06_22-20-14.png}
+	
+	Требуется построить матрицу $X$ с ограничениями на сумму по строкам и столбцам:
+	
+	\includegraphics[width=9cm]{2019-12-07_12-09-38.png}
+	
+\end{frame}
+
+\section{Общая постановка задачи}
+\begin{frame}
+	\frametitle{\insertsection}
+	
+	$$f(X) \to \min (\max)$$
+	$$g_i(X)\begin{bmatrix} = \\ \geq \\ \leq \end{bmatrix} 0, i = 1, 2, \dots, m$$
+	
+    \begin{itemize}
+	\item Метод замены переменных
+	\item Метод штрафных функций
+	\item Метод множителей Лагранжа
+	\item Релаксационный метод
+	\end{itemize}
+	
+\end{frame}
+
+\section{Метод замены переменных}
+\begin{frame}
+	\frametitle{\insertsection}
+	
+    В целевой функции выполняем замену $$x_i = \phi(z)$$ таким образом, чтобы безусловный экстремум новой функции совпадал с условным экстремумом целевой функции.
+    
+    Например
+    $$f(x) = x^2 \to \min$$
+    $$x \geq 1$$
+    Выполним замену $$x = 1 + z^2$$
+    Получаем $$(1 + z^2)^2 \to \min$$
+	
+\end{frame}
+
+\section{Метод штрафных функций}
+\begin{frame}
+	\frametitle{\insertsection}
+	
+    В целевую функцию добавляем штрафную функцию, которая очень быстро растет (убывает) при нарушении ограничений.
+    
+    Например
+    $$f(x) = x^2 \to \min$$
+    $$x \geq 1$$
+    Добавим штрафную функцию $$h(x) = (\min\{x-1, 0\})^2$$
+    Тогда задача условной оптимизации сводится к безусловной
+    $$x^2 + M \cdot h(x) \to \min$$ где $M>0$ — выбранная константа.
+	
+\end{frame}
+
+\section{Метод множителей Лагранжа}
+\begin{frame}
+	\frametitle{\insertsection}
+	
+	Рассмотрим оптимизационную задачу
+	$$f(X) \to \min$$
+	При ограничениях
+	$$\begin{matrix}
+	g_1(X) = 0\\
+	\dots \\
+	g_k(X) = 0 \\
+	\end{matrix}$$
+	Функция Лагранжа имеет вид
+	$$\mathcal L(X, \lambda_1, \dots, \lambda_k) = f(X) + \lambda_1g_1(X) + \dots + \lambda_kg_k(X)$$
+	Решаем систему уравнений
+	$$\nabla \mathcal L(X, \lambda_1, \dots, \lambda_k) = 0$$
+	
+\end{frame}
+
+\section{Релаксационный метод}
+\begin{frame}
+	\frametitle{\insertsection}
+	
+	\begin{center}
+	    \includegraphics[width=10cm]{diagram.png}
+	    Возможные и прогрессивные направления
+	\end{center}
+
+\end{frame}
+
+\section{Реализованные методы для прогнозирования SUT таблиц}
+\begin{frame}
+	\frametitle{\insertsection}
+	
+	\begin{itemize}
+	\item Метод проектирования градиента (релаксационный)
+	\item Статья "Projection of Supply and Use tables: methods and their empirical assessment" (Temurshoev, Yamano, Webb, 2010):
+	\begin{itemize}
+    	\item Improved squared differences (ISD)
+    	\item \textbf{Improved normalized squared differences} (INSD)
+    	\item Improved weighted squared differences (IWSD)
+    	\item RAS
+	\end{itemize}
+	\end{itemize}
+	
+\end{frame}
+
+\section{Метод Improved normalized squared differences}
+\begin{frame}
+	\frametitle{\insertsection}
+	Сделаем замену
+	$$z_{ij} = \frac{x_{ij}}{a_{ij}}$$
+	Решаем оптимизационную задачу
+	$$f(Z) = \sum_i \sum_j |a_{ij}|(z_{ij}-1)^2 \to \min$$
+	При ограничениях
+	$$\begin{matrix}
+	\sum_j a_{ij}z_{ij} = u_{i} \\
+	\sum_i a_{ij}z_{ij} = v_{j} \\
+	a_{ij}z_{ij} \geq 0 \\
+	\end{matrix}$$
+	
+\end{frame}
+
+\section{Метод Improved normalized squared differences}
+\begin{frame}
+	\frametitle{\insertsection}
+	
+	Запишем функцию Лагранжа ($M$ — штрафной коэффициент)
+	
+	$$\mathcal{L}(Z, \lambda, \tau) = \frac{1}{2} \sum_i \sum_j |a_{ij}|\left((z_{ij}-1)^2 + M(\min\{0, z_{ij}\})^2\right)$$
+	$$+ \sum_i \lambda_i\left(u_i - \sum_j a_{ij}z_{ij}\right) + \sum_j \tau_j \left(v_j - \sum_i a_{ij}z_{ij} \right)$$
+	
+	Требуется решить систему
+	
+	$$\begin{cases}
+	\frac{\partial \mathcal L}{\partial z_{ij}} = 0 \\
+	\sum_j a_{ij}z_{ij} = u_{i} \\
+	\sum_i a_{ij}z_{ij} = v_{j}
+	\end{cases}$$
+	
+\end{frame}
+
+\section{Метод Improved normalized squared differences}
+\begin{frame}
+	\frametitle{\insertsection}
+	
+	Решение
+	
+	$$z_{ij} = 
+	\begin{cases}
+	1 & \text{если } a_{ij} = 0\\
+	1 + \frac{a_{ij}}{|a_{ij}|(\lambda_i + \tau_i)} & \text{если } 1 + \frac{a_{ij}}{|a_{ij}|(\lambda_i + \tau_i)} \geq 0 \\
+	\frac{1}{1+M}(1 + \frac{a_{ij}}{|a_{ij}|(\lambda_i + \tau_i)}) & \text{в остальных случаях}
+	\end{cases}$$
+	$$\lambda_i = \frac{1}{\sum_j|a_{ij}|}\left(u_i-\sum_ja_{ij} +\sum_j(M a_{ij} \min \{0, z_{ij}\} - \tau_j|a_{ij}|) \right)$$
+	$$\tau_j = \frac{1}{\sum_i |a_{ij}| }\left(v_i-\sum_i a_{ij} +\sum_i(M a_{ij} \min \{0, z_{ij}\} - \lambda_i|a_{ij}|) \right)$$
+	
+\end{frame}
+
+\section{Метод Improved normalized squared differences}
+\begin{frame}
+	\frametitle{\insertsection}
+	
+	Применим итерационный алгоритм:
+	\begin{enumerate}
+	    \item Инициализируем $Z^{[0]} = (1)$, $\lambda^{[0]} = (0)$, $\tau^{[0]} = (0)$
+	    \item Вычисляем новые $\lambda^{[i]}, \tau^{[i]}$
+	    \item Вычисляем новую матрицу $Z^{[i]}$
+	    \item Повторяем 2-3 до тех пор пока не выполнится условие 
+	    $$\begin{cases}
+	    \lambda^{[i]} - \lambda^{[i-1]} < \epsilon_\lambda \\ 
+	    \tau^{[j]} - \tau^{[j-1]} < \epsilon_\tau
+	    \end{cases}$$
+	    \item Выполняем обратную замену $x_{ij} = z_{ij}a_{ij}$
+	\end{enumerate}
+	
+\end{frame}
+
+\section{Метод проектирования градиента (релаксационный)}
+\begin{frame}
+	\frametitle{\insertsection}
+	
+	Запишем матрицу $X_{m \times n}$ в виде вектора 
+	$$x = (x_{11}, x_{12}, \dots, x_{mn})^T$$
+	Выполним замену переменных
+	$$z_{i} = \frac{x_{i}}{a_{i}} - 1$$
+	Решаем задачу квадратичной оптимизации
+	$$f(Z) = z^T \cdot A^* \cdot z \to \min$$
+	$$A^{**}z=b$$
+	
+	
+\end{frame}
+
+\section{Метод проектирования градиента (релаксационный)}
+\begin{frame}
+	\frametitle{\insertsection}
+	$$f(Z) = z^T \cdot A^* \cdot z \to \min$$
+	$$A^{**}z=b$$
+	На примере матрицы $A_{2 \times 2}$:
+	
+	$$A^* = \begin{bmatrix}
+	|a_{11}| & 0 & 0 & 0 \\
+	0 & |a_{12}| & 0 & 0 \\
+	0 & 0 & |a_{21}| & 0 \\
+	0 & 0 & 0 & |a_{22}| \\
+	\end{bmatrix}; 
+	A^{**} = \begin{bmatrix}
+	a_{11} & a_{12} & 0 & 0 \\
+	0 & 0 & a_{21} & a_{22} \\
+	a_{11} & 0 & a_{21} & 0 \\
+	0 & a_{21} & 0 & a_{22} \\
+	\end{bmatrix}$$
+	$$b = \begin{bmatrix} u_1 & u_2 & v_1 & v_2 \end{bmatrix}^T - A^{**}\begin{bmatrix} 1 & 1 & 1 & 1 \end{bmatrix}^T$$
+	
+\end{frame}
+
+\section{Метод проектирования градиента (релаксационный)}
+\begin{frame}
+	\frametitle{\insertsection}
+	
+	Переобозначим для краткости $A^{**} := A$. 
+	
+	Решение находится итерационно c начальной точкой
+	$$Az_0 = b \Rightarrow z_0 = A^+b $$
+	$$z_{i+1} = z_i + t_iD_i$$ где $D_i$ — направление шага, $t_i$ - длина шага
+	
+	$$D = -P \nabla f(Z) = -P 
+	\begin{pmatrix} 
+	2 \cdot |a_{11}| \cdot z_{11} \\
+	... \\
+	2 \cdot |a_{mn}| \cdot z_{mn} \\
+	\end{pmatrix}$$
+	
+	$$P = I - A^T(AA^T)^{-1}A = I - A^+A$$
+	
+\end{frame}
+
+\section{Пример}
+\begin{frame}
+	\frametitle{\insertsection}
+	
+	Имеем исходную матрицу $A$:
+	
+	\includegraphics[width=9cm]{2019-12-06_22-20-14.png}
+	
+	Если установить $M = 100$, $\epsilon_\lambda = \epsilon_\tau = 10^{-8}$, то за $95$ итерации матрица $X$ примет вид:
+	
+	\includegraphics[width=9cm]{2019-12-07_12-15-01.png}
+	
+\end{frame}
+
+\section{Другие методы}
+\begin{frame}
+	\frametitle{\insertsection}
+	
+	\begin{enumerate}
+	    \item Improved squared differences
+	    $$f(Z) = \sum_i \sum_j a_{ij}^2(z_{ij}-1)^2$$
+	    \item Improved weighted squared differences
+	    $$f(Z) = \sum_i \sum_j |a_{ij}^3|(z_{ij}-1)^2$$
+	    \item RAS
+	    $$f(Z) = \sum_i \sum_j |a_{ij}| \left(z_{ij} \ln \left( \frac{z_{ij}}{e} \right) + 1 \right)$$
+	\end{enumerate}
+	
+\end{frame}
+
+\section{Данные для тестирования}
+\begin{frame}
+	\frametitle{\insertsection}
+	
+	\begin{center}
+	
+	\end{center}
+	\begin{itemize}
+	    
+	    \item SUT за 2010, 2011, 2012 годы (Нидерланды) 
+	    
+	    6 матриц 64x64
+	    
+	    Источник: World Input-Output Database (http://www.wiod.org/)
+	    
+	    \begin{itemize}
+	        \item Первый сценарий: $2010 \Rightarrow 2011$
+	        \item Второй сценарий: $(2010 \Rightarrow 2011) \Rightarrow 2012$
+	    \end{itemize}
+	    
+	    \item SUT за 2012, 2013 годы (Россия)
+	    
+	    4 матрицы 62x59
+	    
+	    Источник: Росстат
+	    
+	    \begin{itemize}
+	        \item Третий сценарий: $2012 \Rightarrow 2013$
+	    \end{itemize}
+	\end{itemize}
+    
+\end{frame}
+
+\begin{frame}
+
+    \includegraphics[width=\textwidth]{2019-12-12_05-25-06.png}
+    
+\end{frame}
+
+\section{Метрики}
+\begin{frame}
+	\frametitle{\insertsection}
+	
+	\begin{itemize}
+	    \item Mean absolute percentage error
+	    
+	    $$MAPE = \frac{1}{nm}\sum_i\sum_j\frac{|x_{ij} - x_{ij}^{true}|}{|x_{ij}^{true}|} \cdot 100$$
+	    
+	    \item Weighted absolute percentage error
+	    
+	    $$WAPE = \sum_i\sum_j\left( \frac{|x_{ij}^{true}|}{\sum_k \sum_l x_{kl}^{true}}\right) \frac{|x_{ij} - x_{ij}^{true}|}{|x_{ij}^{true}|}\cdot100$$
+	    
+	    \item Standardized weighted absolute difference
+	    
+	    $$SWAD = \frac{\sum_i \sum_j |x_{ij}^{true}| \cdot |x_{ij} - x_{ij}^{true}|}{\sum_k \sum_l\left( x_{kl}^{true} \right)^2}$$
+	    
+	\end{itemize}
+	
+\end{frame}
+
+\section{Результаты. Нидерланды, зависимость от M}
+\begin{frame}
+	\frametitle{\insertsection}
+	
+	\includegraphics[width=\textwidth]{2019-12-12_05-45-48.png}
+	
+\end{frame}
+
+\section{Результаты. Нидерланды, при $M = 10^5$}
+\begin{frame}
+	\frametitle{\insertsection}
+	
+	\includegraphics[width=\textwidth]{2019-12-12_06-04-50.png}
+	
+\end{frame}
+
+\section{Результаты. Россия, при $M = 1000$}
+\begin{frame}
+	\frametitle{\insertsection}
+	
+	\includegraphics[width=\textwidth]{2019-12-12_06-20-46.png}
+	
+\end{frame}
+
+\end{document}

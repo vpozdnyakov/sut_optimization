@@ -1,10 +1,11 @@
-# NonLinearOptimization
-We try to pursue well-known supply and use tables problem from the nonlinear optimization perspective.
+# Prediction of Supply and Use Tables based on Nonlinear Optimization
 
-Firstly I need to mention the used sources. All methods used in "MethodsFromArticle.ipynb" are taken from the article called "Projection of Supply and Use tables: methods and their empirical assessment"  
-Working Paper Number: 2  
-Authors: Umed Temurshoev, Norihiko Yamano and Colin Webb. (DOI: 10.2139/ssrn.1539089)
+Implementation of nonlinear optimization methods for prediction of [Supply and Use Tables](https://en.wikipedia.org/wiki/Input%E2%80%93output_model) (SUTs) based on historical data.
 
-Also we emplement standart proximal gradient method (GradProjection) which is described in many sources (in particular we refer to russian book "МЕТОДЫ ОПТИМИЗАЦИИ И ИССЛЕДОВАНИЕ ОПЕРАЦИЙ ДЛЯ БАКАЛАВРОВ ИНФОРМАТИКИ" by Б.А.Гадких part 2.)
+## Contents of the repository
 
-The describtion of studied problem is represented in aforementioned article and also in the "TaskDescription.pdf" but in russian.
+* [MethodsFromArticle.ipynb](MethodsFromArticle.ipynb) — implementation and testing of methods from the article ["Projection of supply and use tables: Methods and their empirical assessment"](http://dx.doi.org/10.2139/ssrn.1539089)
+* [GradProjection.ipynb](GradProjection.ipynb) — implementation and testing of the proximal gradient method from the russian book ["Методы оптимизации и исследование операций для бакалавров информатики. Ч. II"](https://www.google.com/search?q=ISBN+978-5-89503-483-5)
+* [data](data) — SUTs dataset of the Netherlands for the fiscal years of 2010, 2011, and 2012 from the [WIOD Repository](http://www.wiod.org/)
+* [data_rus](data_rus) — SUTs dataset of Russia for the fiscal years of 2012, 2013 from the [Rosstat Repository](https://gks.ru/)
+* [presentation/main.pdf](report/main.pdf) — presentation of a brief description of the problem, mathematic model, testing model and results (in Russian)
