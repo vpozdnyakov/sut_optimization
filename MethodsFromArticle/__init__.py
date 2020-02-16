@@ -9,12 +9,9 @@ def diog(x):
     return np.eye(x.shape[0]) * x
 
 
-def RAS_pred(previous_year, current_year, eps):
+def RAS_pred(previous_year, u, v, eps):
     A = previous_year
-    A = A + 10 ** (-8)  # We need to add some noise in order to avoid mistakes computing everse matrix
-    B = current_year
-    u = np.sum(B, axis=1)
-    v = np.sum(B, axis=0)
+    A = A + 10 ** (-8)  # We need to add some noise in order to avoid mistakes computing reverse matrix
     r = np.ones(A.shape[0])
     s = np.ones(A.shape[1])
     while 1:
@@ -163,13 +160,13 @@ methods = {'INS': [next_lambda, next_tau, compute_z], 'ISD': [ISDnext_lambda, IS
            'IWS': [IWSnext_lambda, IWSnext_tau, IWScompute_z]}
 
 
-def predict(previous_year, current_year, method='INS', M=100, eps=1e-8):
+def predict(previous_year, u, v, method='INS', M=100, eps=1e-8):
     '''This is the main function which taken the previous year data can predict matrix for the next year.
     variables:
-    current_year:
-        is needed to compute the overall data (summ by rows and columns).
     previous_year:
         data of the previous year
+    u, v:
+        sum by rows and columns respectively
     method:
         It is one of the following strings: "INS", "ISD", "IWS". The chosen method will be used
     M:
@@ -178,11 +175,8 @@ def predict(previous_year, current_year, method='INS', M=100, eps=1e-8):
         Working Paper Number: 2
         Authors: Umed Temurshoev, Norihiko Yamano and Colin Webb'''
     if method == 'RAS':
-        return RAS_pred(previous_year, current_year, eps)
+        return RAS_pred(previous_year, u, v, eps)
     A = previous_year
-    B = current_year
-    u = np.sum(B, axis=1)
-    v = np.sum(B, axis=0)
     z = np.ones(A.shape)
     lambd = np.zeros(u.shape[0])
     tau = np.zeros(v.shape[0])
@@ -228,14 +222,11 @@ def find_actives(used, X):
     return set(activ)
 
 
-def predict_grad(previous_year, current_year, eps=1e-8):
+def predict_grad(previous_year, u, v, eps=1e-8):
     D = previous_year
-    B = current_year
 
     m = D.shape[1]
     n = D.shape[0]
-    u = np.sum(B, axis=1)  # Summ by rows
-    v = np.sum(B, axis=0)  # Summ by columns
 
     C = np.eye(D.shape[0] * D.shape[1]) * D.flatten()  # Quadratic matrix in transition from matrices to vectors
     A = np.zeros((D.shape[0] + D.shape[1], D.shape[0] * D.shape[1]))  # Restriction matrix Ax  = b
@@ -299,4 +290,4 @@ def predict_grad(previous_year, current_year, eps=1e-8):
 
         P = np.eye(A.shape[1]) - alg.pinv(A).dot(A)  # Projection matrix refreshment
 
-    return ((X + 1) * C.diagonal()).reshape(B.shape[0], B.shape[1])
+    return ((X + 1) * C.diagonal()).reshape(len(u), len(v))
