@@ -7,4 +7,4 @@ presentation/main.out
 presentation/main.snm
 presentation/main.synctex.gz
 presentation/main.toc
-.DS_Store
+*.DS_Store
