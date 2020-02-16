@@ -33,7 +33,7 @@ sup11 = np.load('data//sup11.npy')
 u = np.sum(sup11, axis=1)
 v = np.sum(sup11, axis=0)
 
-# Availabled methods for prediction:
+# Available methods for prediction:
 #   INS - Improved Normalized Squared Difference
 #   IWS - Improved Weighted Square Differences
 #   ISD - Improved Square Differences
