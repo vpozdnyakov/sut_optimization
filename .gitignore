@@ -8,3 +8,5 @@ presentation/main.snm
 presentation/main.synctex.gz
 presentation/main.toc
 *.DS_Store
+MethodsFromArticle/__pycache__/*
+.vscode/launch.json
