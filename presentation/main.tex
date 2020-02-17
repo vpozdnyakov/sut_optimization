@@ -2,12 +2,14 @@
 
 \usetheme{HSE}
 \setbeamertemplate{footline}[page number]
+\usefonttheme{professionalfonts}
 
 \usepackage{cmap}					
 \usepackage{mathtext} 				
 \usepackage[T2A]{fontenc}			
 \usepackage[utf8]{inputenc}			
 \usepackage[english,russian]{babel}
+\usepackage{array}
 
 \title{Квадратичная оптимизация в задаче прогнозирования SUT таблиц}
 \author{Поздняков Виталий,  Рог Алексей}
@@ -23,8 +25,19 @@
 
 \begin{frame}
 	\frametitle{\insertsection}
-	
-	\includegraphics[width=\textwidth]{2019-12-07_12-18-36.png}
+
+	\begin{center}
+		\begin{tabular}{|c|c|c|c|c|}
+			\hline
+			& Отрасль 1 & Отрасль 2 & \dots & Отрасль N \\
+			\hline
+			Продукция 1	& \dots	& \dots	& \dots	& \dots \\
+			Продукция 2	& \dots	& \dots	& \dots	& \dots \\
+			\dots & \dots & \dots & \dots & \dots \\
+			Продукция N	& \dots	& \dots	& \dots	& \dots \\
+			\hline
+		\end{tabular}
+	\end{center}
 	
 	\begin{itemize}
     \item SUT (Supply and Use tables) — таблицы "затраты-выпуск"
@@ -38,8 +51,34 @@
 \begin{frame}
 	\frametitle{\insertsection}
 	
-     \includegraphics[width=\textwidth]{2019-12-04_20-57-19.png}
-     Нидерланды, 2010 год, фрагмент
+	\begin{center}
+		\footnotesize{
+		\begin{tabular}{|l|l|l|l|}
+			\hline
+			& Сбор и 		& Строительство & Оптовая  	\\
+			& переработка 	&  				& торговля  \\
+			& отходов 		&  				&   		\\
+			\hline
+			\multicolumn{4}{|c|}{Таблица ресурсов} \\
+			\hline
+			Неметаллические минералы  	& 84 & 19 & 95 \\
+			Основные металлы  			& 388 & 0 & 80 \\
+			Металлоконструкции  		& 0 & 950 & 122 \\
+			Строительные работы  		& 2 & 84100 & 73 \\
+			\hline
+			\multicolumn{4}{|c|}{Таблица использования} \\
+			\hline
+			Неметаллические минералы  	& 6 & 4128 & 0 \\
+			Основные металлы  			& 56 & 944 & 0 \\
+			Металлоконструкции  		& 41 & 5033 & 16 \\
+			Строительные работы  		& 41 & 22250 & 216 \\
+			\hline
+		\end{tabular}
+		}
+	\end{center}
+	
+	
+	Нидерланды, 2010 год, фрагмент
 
 \end{frame}
 
@@ -88,11 +127,35 @@
 	
 	Пусть матрица $A$ имеет вид:
 	
-	\includegraphics[width=9cm]{2019-12-06_22-20-14.png}
+	\begin{center}
+		\begin{tabular}{|m{2cm}|m{2cm}|m{2cm}||m{2cm}|}
+			\hline
+			84 & 19 & 95 & \textbf{198} \\
+			388 & 0 & 80 & \textbf{468} \\
+			0 & 950 & 122 & \textbf{1072} \\
+			2 & 84100 & 73 & \textbf{84175} \\
+			\hline
+			\hline
+			\textbf{474} & \textbf{85069} & \textbf{370} & \textbf{Сумма} \\
+			\hline
+		\end{tabular}
+	\end{center}
 	
 	Требуется построить матрицу $X$ с ограничениями на сумму по строкам и столбцам:
 	
-	\includegraphics[width=9cm]{2019-12-07_12-09-38.png}
+	\begin{center}
+		\begin{tabular}{|m{2cm}|m{2cm}|m{2cm}||m{2cm}|}
+			\hline
+			? & ? & ? & \textbf{185} \\
+			? & ? & ? & \textbf{495} \\
+			? & ? & ? & \textbf{968} \\
+			? & ? & ? & \textbf{88008} \\
+			\hline
+			\hline
+			\textbf{473} & \textbf{88748} & \textbf{435} & \textbf{Сумма} \\
+			\hline
+		\end{tabular}
+	\end{center}
 	
 \end{frame}
 
