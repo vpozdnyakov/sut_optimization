@@ -2,7 +2,6 @@
 
 \usetheme{HSE}
 \setbeamertemplate{footline}[page number]
-\usefonttheme{professionalfonts}
 
 \usepackage{cmap}					
 \usepackage{mathtext} 				
@@ -530,7 +529,33 @@
 \begin{frame}
 	\frametitle{\insertsection}
 	
-	\includegraphics[width=\textwidth]{2019-12-12_06-04-50.png}
+	\renewcommand{\arraystretch}{1.5}
+	\tiny{
+	\begin{tabular}{|r|m{0.5cm}m{0.5cm}m{0.5cm}m{0.5cm}m{0.6cm}|m{0.5cm}m{0.5cm}m{0.5cm}m{0.5cm}m{0.6cm}|}
+		\multicolumn{1}{c}{} & \multicolumn{5}{c}{Supply $2010 \Rightarrow 2011$} & \multicolumn{5}{c}{Use $2010 \Rightarrow 2011$}\\
+		\hline
+		& \textbf{IWSD} & \textbf{INSD} & \textbf{ISD} & \textbf{RAS} & \textbf{GRAD} & \textbf{IWSD} & \textbf{INSD} & \textbf{ISD} & \textbf{RAS} & \textbf{GRAD} \\
+		\hline
+		\textbf{MAPE} & 319.21 & 7.58 & 157.43 & 81.94 & 7.14 & 331.94 & 11.99 & 156.98 & 33.43 & 10.96 \\
+		\textbf{WAPE} & 13.68 & 1.70 & 10.66 & 5.83 & 1.67 & 21.39 & 5.01 & 17.10 & 9.52 & 6.07 \\
+		\textbf{SWAD} & 0.052 & 0.004 & 0.046 & 0.049 & 0.003 & 0.134 & 0.022 & 0.125 & 0.076 & 0.033 \\
+		\hline
+	\end{tabular}
+	}
+	\bigskip
+	
+	\tiny{
+	\begin{tabular}{|r|m{0.5cm}m{0.5cm}m{0.5cm}m{0.5cm}m{0.6cm}|m{0.5cm}m{0.5cm}m{0.5cm}m{0.5cm}m{0.6cm}|}
+		\multicolumn{1}{c}{} & \multicolumn{5}{c}{Supply $(2010 \Rightarrow 2011) \Rightarrow 2012$} & \multicolumn{5}{c}{Use $(2010 \Rightarrow 2011) \Rightarrow 2012$}\\
+		\hline
+		& \textbf{IWSD} & \textbf{INSD} & \textbf{ISD} & \textbf{RAS} & \textbf{GRAD} & \textbf{IWSD} & \textbf{INSD} & \textbf{ISD} & \textbf{RAS} & \textbf{GRAD} \\
+		\hline
+		\textbf{MAPE} & 337.66 & 9.76 & 253.14 & 83.09 & 9.19 & 369.60 & 14.59 & 245.09 & 32.90 & 13.16 \\
+		\textbf{WAPE} & 18.65 & 2.38 & 14.24 & 5.12 & 2.38 & 29.97 & 7.32 & 24.03 & 9.17 & 8.29 \\
+		\textbf{SWAD} & 0.070 & 0.005 & 0.059 & 0.038 & 0.004 & 0.186 & 0.033 & 0.175 & 0.075 & 0.052 \\
+		\hline
+	\end{tabular}
+	}
 	
 \end{frame}
 
